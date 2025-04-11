@@ -36,4 +36,5 @@ jobs:
 
       - name: Deploy to ECS
         run: |
-          aws ecs update-service --cluster your-cluster --service your-service --force-new-deployment
+          aws ecs update-service --cluster daggula-cluster --service daggula-service --force-new-deployment
+
