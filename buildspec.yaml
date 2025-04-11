@@ -17,8 +17,7 @@ phases:
       - echo Pushing Docker image to ECR...
       - docker push 904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api:latest
       - echo Writing image definitions...
-      - printf '[{"name":"daggula-task","imageUri":"904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api:latest"}]' > imagedefinitions.json
-
+      - printf '[{"name":"daggula-container","imageUri":"904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api:latest"}]' > imagedefinitions.json
 artifacts:
   files:
     - imagedefinitions.json
