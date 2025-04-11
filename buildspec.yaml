@@ -4,22 +4,25 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 904233128713.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api
+      - IMAGE_TAG=latest
 
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t daggula-api .
-      - docker tag daggula-api:latest 904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api:latest
-
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+  
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing Docker image to ECR...
-      - docker push 904233128713.dkr.ecr.us-east-1.amazonaws.com/daggula-api:latest
+      - echo Pushing the Docker image...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - |
+        printf '[{"name":"daggula-task","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
-    - '**/*'
+    - imagedefinitions.json
